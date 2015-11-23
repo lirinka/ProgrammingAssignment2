@@ -7,13 +7,23 @@
 
 makeCacheMatrix<-function(x = matrix()){
 inv<-NULL
+
+# this function sets the cached value to null (in case the data has been changed)
 set<-function(y){
 	x<<-y
 	inv<<-NULL
 }
+# this function gets the matrix data
 get<-function() x
+
+# this function sets the inverse of the matrix
 setinverse<-function(inverse) inv<<-inverse
+
+# this function gets the inverse of the matrix
 getinverse<-function() inv
+
+# this returns the list of functions that get and set the matrix,
+# the inverse of the matrix and the cached value
 list(set=set, get=get, setinverse=setinverse, getinverse=getinverse) 
 }
 
@@ -23,10 +33,15 @@ list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
 
 cacheSolve<-function(x, ...) {
 inv<-x$getinverse()
+
+# if the matrix has not been changed, the cached value is retrieved and returned
 if(!is.null(inv)){
 	message("getting cached data")
 	return(inv)
 }
+
+# otherwise a new inverse is computed and cached
+
 dat<-x$get()
 inv<-solve(dat)
 x$setinverse(inv)
